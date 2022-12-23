@@ -1,0 +1,7 @@
+@import '../../index';
+
+.Header{
+    @include horizontal-vertical-center;
+    text-align: center;
+    font-family: $Roboto;
+}

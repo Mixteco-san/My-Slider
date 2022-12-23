@@ -1,0 +1,36 @@
+@import '../../index';
+
+.Slider{
+    $Control-width: 50px;
+
+    width: 100%;
+    padding: 20px 15px;
+    &__Wrapper{
+        @include container-w-max-min(1400px, 290px);
+        margin: 0 auto;
+        @include horizontal-vertical-center;
+        overflow: hidden;
+        .Control{
+            @include container-w-h($Control-width, 100%)
+        }
+        .Screens-container{
+            width: calc(100% - ($Control-width * 2));
+            height: 100px;
+            @include vertical-center;
+            overflow: auto;
+            .Slide-Img{
+                margin: 0 20px;
+                @include horizontal-vertical-center;
+                &--main{
+                    @include container-w-h(320px, 100%);
+                }
+                &--simple{
+                    @include container-w-h(270Px, 100%);
+                }
+                img{
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

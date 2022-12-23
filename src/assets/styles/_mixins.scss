@@ -1,0 +1,38 @@
+@mixin container-w-h($W, $H){
+    width: $W;
+    height: $H;
+}
+@mixin container-square($W){
+    width: $W;
+    height: $W;
+}
+@mixin container-circle($R){
+    @include container-square($R);
+    border-radius: 50%;
+}
+@mixin container-w-max($MaxW){
+    width: 100%;
+    max-width: $MaxW;
+}
+@mixin container-w-min($MinW){
+    width: 100%;
+    max-width: $MinW;
+}
+@mixin container-w-max-min($Max, $Min){
+    width: 100%;
+    max-width: $Max;
+    min-width: $Min;
+}
+@mixin vertical-center{
+    display: flex;
+    align-items: center;
+}
+@mixin horizontal-center{
+    display: flex;
+    justify-content: center;
+}
+@mixin horizontal-vertical-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

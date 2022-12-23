@@ -1,5 +1,7 @@
 import React from "react";
 
+import Image from "../Image/Image";
+
 import './Slider.scss';
 
 export default function Slider(){
@@ -47,19 +49,22 @@ export default function Slider(){
                         Icon
                     </p>
                 </div>
-                <div className="Screens-container">
-                {imgData.map( (img, index) => {
-                    return(
-                        <div 
-                            key={index}
-                            className={`Slide-Img ${index === 2 ? 'Slide-img--main' : 'Slide-img--simple'}`}>
-                            <img
-                                src={drive + img.url}
-                                alt={img.name} 
-                            />
-                        </div>
-                    )
-                })}
+                <div className="Slides-container">
+                    <div className="Slides-Wrap">
+                    {imgData.map( (img, index) => {
+                        return(
+                            <div 
+                                key={index}
+                                className={`Slide-Img ${index === 2 ? 'Slide-Img--main' : 'Slide-Img--simple'}`}>
+                                <Image
+                                    src={drive + img.url}
+                                    alt={img.name} 
+                                    Vertical={true}
+                                />
+                            </div>
+                        )
+                    })}
+                    </div>
                 </div>
                 <div className="Control">
                     <p>

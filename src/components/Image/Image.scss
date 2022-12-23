@@ -1,0 +1,16 @@
+@import '../../index';
+
+.Vertical-Image{
+    width: 100%;
+    @include horizontal-vertical-center;
+    img{
+        width: 100%;
+    }
+}
+.Horizontal-Image{
+    width: 100%;
+    @include horizontal-vertical-center;
+    img{
+        height: 100%;
+    }
+}

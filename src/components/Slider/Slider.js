@@ -55,7 +55,7 @@ export default function Slider(){
                         return(
                             <div 
                                 key={index}
-                                className={`Slide-Img ${index === 2 ? 'Slide-Img--main' : 'Slide-Img--simple'}`}>
+                                className={`Slide ${index === 2 ? 'Slide--main' : 'Slide--simple'}`}>
                                 <Image
                                     src={drive + img.url}
                                     alt={img.name} 

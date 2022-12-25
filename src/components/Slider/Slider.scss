@@ -10,23 +10,25 @@
         height: 100px;
         margin: 0 auto;
         @include horizontal-vertical-center;
-        overflow: hidden;
         .Control{
             @include container-w-h($Control-width, 100%)
         }
         .Slides-container{
             width: calc(100% - ($Control-width * 2));
-            overflow-x: scroll;
             .Slides-Wrap{
                 @include vertical-center;
-                .Slide-Img{
+                overflow-x: hidden;
+                .Slide{
+                    height: 100%;
                     margin: 0 20px;
                     @include horizontal-vertical-center;
                     &--main{
-                        @include container-w-h(300px, 100%);
+                        width: 320px;
+                        min-width: 320px;
                     }
                     &--simple{
-                        @include container-w-h(200Px, 100%);
+                        width: 196px;
+                        min-width: 196px;
                     }
                 }
             }

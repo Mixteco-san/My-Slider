@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
 import Image from "../Image/Image";
 
@@ -45,9 +47,7 @@ export default function Slider(){
         <section className="Slider">
             <div className="Slider__Wrapper">
                 <div className="Control">
-                    <p>
-                        Icon
-                    </p>
+                    <FontAwesomeIcon icon={faChevronLeft} />
                 </div>
                 <div className="Slides-container">
                     <div className="Slides-Wrap">
@@ -67,9 +67,7 @@ export default function Slider(){
                     </div>
                 </div>
                 <div className="Control">
-                    <p>
-                        Icon
-                    </p>
+                    <FontAwesomeIcon icon={faChevronRight} />
                 </div>
             </div>
         </section>

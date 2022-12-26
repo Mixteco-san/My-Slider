@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback, useState } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
@@ -49,9 +49,6 @@ export default function Slider(){
     }
     // ------ end Data ----
     
-    const [screenSize, setScreenSize] = useState(0);
-    // const [mainElement, setMainElement] = useState(null)
-    
     const drive = 'http://drive.google.com/uc?export=view&id=';
     const sizeList = imgData.length;
     const sliderWrap = useRef(null);
@@ -62,31 +59,11 @@ export default function Slider(){
     const getWidthOfElement = (element) => {
         return element.offsetWidth;
     }
-    // Funcion que te devuelve el elemento que se encuentra en medio de tu slider
-    const getMainElement = useCallback( (sliderList) => {
-        if( screenSize >= 1400 ){
-            return sliderList.children[2]
-        }
-        if( screenSize < 1400 && screenSize >= 880  ){
-            return sliderList.children[1]
-        }
-        if(screenSize < 880){
-            return sliderList.children[0]
-        }
-        
-    }, [screenSize])
-    // Anadiendo estilos a nuestros slides
-    const addStylesToElements = (element) => {
-        element.style.width = '320px';
-        element.style.minWidth = '320px';
-        element.style.transition = '0.3s ease all'
-    }
+    
     // Funcion para moverte a la siguiente imagen
     const moveNext = useCallback(() => {
         if(sliderWrap.current.children.length > 5){
             const firstElement = sliderWrap.current.children[0];
-            const mainElement = getMainElement(sliderWrap.current);
-            addStylesToElements(mainElement)
             
             sliderWrap.current.style.transition = `${velocidad}s ease all`;
             sliderWrap.current.style.translate = `-${getWidthOfElement(firstElement) + 40}px`;
@@ -100,7 +77,7 @@ export default function Slider(){
             }
             sliderWrap.current.addEventListener('transitionend', detectFinishTransition);
         }
-    }, [velocidad, getMainElement])
+    }, [velocidad])
     // Funcion para moverte una imagen atras
     const movePrev = () => {
         if(sliderWrap.current.children.length > 5){
@@ -135,25 +112,6 @@ export default function Slider(){
 			});
         }
     }, [startConfiguration.autoplay, startConfiguration.timmer, moveNext]) 
-    // Hook que usamos para obsercar cambios en el DOM
-    useEffect( ()=> {
-        const detectScreen = () => {
-            const updateSizeScreen = () => {
-                const width = document.body.clientWidth
-                setScreenSize(width)
-            }
-            updateSizeScreen();
-            window.addEventListener('resize', updateSizeScreen)
-
-            return () => {
-                window.removeEventListener('resize', updateSizeScreen);
-            }
-        }
-
-        detectScreen()
-        getMainElement(sliderWrap.current)
-        // console.log(`mainElement: ${mainElement}`)
-    }, [screenSize, getMainElement])
 
     return(
         <section className="Slider">

@@ -4,7 +4,7 @@
     $Control-width: 50px;
 
     width: 100%;
-    padding: 20px 15px;
+    padding: 20px 0;
     &__Wrapper{
         @include container-w-max-min(1400px, 290px);
         height: 100px;
@@ -16,18 +16,18 @@
         .Control{
             @include container-w-h($Control-width, 100%);
             @include horizontal-vertical-center;
-            background: rgb(9,9,121);
-            position: absolute;
-            top: 0;
-            &--Left{
-                background: linear-gradient(90deg, rgba(255,255,255,1) 12%, rgba(255,255,255,0.73) 50%, rgba(0,212,255,0) 100%); 
-                left: 0;
-            }
-            &--Right{
-                background: linear-gradient(270deg, rgba(255,255,255,1) 12%, rgba(255,255,255,0.73) 50%, rgba(0,212,255,0) 100%); 
-                right: 0;
-            }
-            z-index: 15;
+            background: white;
+            // position: absolute;
+            // top: 0;
+            // &--Left{
+            //     background: linear-gradient(90deg, rgba(255,255,255,1) 12%, rgba(255,255,255,0.73) 50%, rgba(0,212,255,0) 100%); 
+            //     // left: 0;
+            // }
+            // &--Right{
+            //     background: linear-gradient(270deg, rgba(255,255,255,1) 12%, rgba(255,255,255,0.73) 50%, rgba(0,212,255,0) 100%); 
+            //     // right: 0;
+            // }
+            // z-index: 15;
             &__Icon{
                 font-size: 2rem;
             }
@@ -39,15 +39,15 @@
             }
         }
         .Slides-container{
-            width: 100%;
+            width: calc(100% - ($Control-width * 2));
             overflow: hidden;
             .Slides-Wrap{
                 height: 100px;
                 @include vertical-center;
-                overflow-x: hidden;
+                overflow: hidden;
                 .Slide{
-                    width: 240px;
-                    min-width: 240px;
+                    width: 220px;
+                    min-width: 220px;
                     min-height: 100%;
                     margin: 0 20px;
                     // transition: .3s ease all;

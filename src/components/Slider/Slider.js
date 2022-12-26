@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useRef, useEffect, useCallback, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
@@ -44,24 +44,49 @@ export default function Slider(){
     ]
     const startConfiguration = {
         timmer: 5000,
-        autoplay: true
+        autoplay: false,
+        controls: true,
     }
     // ------ end Data ----
+    
+    const [screenSize, setScreenSize] = useState(0);
+    // const [mainElement, setMainElement] = useState(null)
     
     const drive = 'http://drive.google.com/uc?export=view&id=';
     const sizeList = imgData.length;
     const sliderWrap = useRef(null);
     const intervalFunction = useRef(null);
     const velocidad = 0.3;
-    
+
+    // Funcion que detecta el tamnio del primer elemento
     const getWidthOfElement = (element) => {
         return element.offsetWidth;
     }
-
+    // Funcion que te devuelve el elemento que se encuentra en medio de tu slider
+    const getMainElement = useCallback( (sliderList) => {
+        if( screenSize >= 1400 ){
+            return sliderList.children[2]
+        }
+        if( screenSize < 1400 && screenSize >= 880  ){
+            return sliderList.children[1]
+        }
+        if(screenSize < 880){
+            return sliderList.children[0]
+        }
+        
+    }, [screenSize])
+    // Anadiendo estilos a nuestros slides
+    const addStylesToElements = (element) => {
+        element.style.width = '320px';
+        element.style.minWidth = '320px';
+        element.style.transition = '0.3s ease all'
+    }
+    // Funcion para moverte a la siguiente imagen
     const moveNext = useCallback(() => {
         if(sliderWrap.current.children.length > 5){
-            //console.log('Siguiente imagen');
             const firstElement = sliderWrap.current.children[0];
+            const mainElement = getMainElement(sliderWrap.current);
+            addStylesToElements(mainElement)
             
             sliderWrap.current.style.transition = `${velocidad}s ease all`;
             sliderWrap.current.style.translate = `-${getWidthOfElement(firstElement) + 40}px`;
@@ -71,16 +96,14 @@ export default function Slider(){
                 sliderWrap.current.style.translate = `0`;
 
                 sliderWrap.current.appendChild(firstElement);
-
                 sliderWrap.current.removeEventListener('transitionend', detectFinishTransition)
             }
             sliderWrap.current.addEventListener('transitionend', detectFinishTransition);
         }
-    }, [velocidad])
-    
+    }, [velocidad, getMainElement])
+    // Funcion para moverte una imagen atras
     const movePrev = () => {
         if(sliderWrap.current.children.length > 5){
-            //console.log('Imagen anterior') 
             const lastElement = sliderWrap.current.children[sizeList - 1];
 
             sliderWrap.current.insertBefore(lastElement, sliderWrap.current.firstChild);
@@ -94,7 +117,7 @@ export default function Slider(){
 			}, 30);
         }
     }
-
+    // Hook para dectactar, parar o repoducir el autoplay
     useEffect( () => {
         if(startConfiguration.autoplay){
             intervalFunction.current = setInterval(() => {
@@ -112,16 +135,40 @@ export default function Slider(){
 			});
         }
     }, [startConfiguration.autoplay, startConfiguration.timmer, moveNext]) 
+    // Hook que usamos para obsercar cambios en el DOM
+    useEffect( ()=> {
+        const detectScreen = () => {
+            const updateSizeScreen = () => {
+                const width = document.body.clientWidth
+                setScreenSize(width)
+            }
+            updateSizeScreen();
+            window.addEventListener('resize', updateSizeScreen)
+
+            return () => {
+                window.removeEventListener('resize', updateSizeScreen);
+            }
+        }
+
+        detectScreen()
+        getMainElement(sliderWrap.current)
+        // console.log(`mainElement: ${mainElement}`)
+    }, [screenSize, getMainElement])
 
     return(
         <section className="Slider">
             <div className="Slider__Wrapper">
-                <div 
-                    className="Control"
-                    onClick={movePrev}
-                >
-                    <FontAwesomeIcon icon={faChevronLeft} />
-                </div>
+                {startConfiguration.controls && 
+                    <div 
+                        className="Control Control--Left"
+                        onClick={movePrev}
+                    >
+                        <FontAwesomeIcon 
+                            icon={faChevronLeft} 
+                            className='Control__Icon'
+                        />
+                    </div>
+                }
                 <div className="Slides-container">
                     <div 
                         ref={sliderWrap}
@@ -131,7 +178,7 @@ export default function Slider(){
                         return(
                             <div 
                                 key={index}
-                                className={`Slide ${index === 2 ? 'Slide--main' : 'Slide--simple'}`}>
+                                className='Slide'>
                                 <Image
                                     src={drive + img.url}
                                     alt={img.name} 
@@ -142,12 +189,17 @@ export default function Slider(){
                     })}
                     </div>
                 </div>
-                <div 
-                    className="Control"
-                    onClick={moveNext}
-                >
-                    <FontAwesomeIcon icon={faChevronRight} />
-                </div>
+                {startConfiguration.controls && 
+                    <div 
+                        className="Control Control--Right"
+                        onClick={moveNext}
+                    >
+                        <FontAwesomeIcon 
+                            icon={faChevronRight} 
+                            className='Control__Icon'
+                        />
+                    </div>
+                }
             </div>
         </section>
     );

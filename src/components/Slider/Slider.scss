@@ -10,32 +10,48 @@
         height: 100px;
         margin: 0 auto;
         @include horizontal-vertical-center;
+        position: relative;
+        top: 0;
+        left: 0;
         .Control{
             @include container-w-h($Control-width, 100%);
             @include horizontal-vertical-center;
+            background: rgb(9,9,121);
+            position: absolute;
+            top: 0;
+            &--Left{
+                background: linear-gradient(90deg, rgba(255,255,255,1) 12%, rgba(255,255,255,0.73) 50%, rgba(0,212,255,0) 100%); 
+                left: 0;
+            }
+            &--Right{
+                background: linear-gradient(270deg, rgba(255,255,255,1) 12%, rgba(255,255,255,0.73) 50%, rgba(0,212,255,0) 100%); 
+                right: 0;
+            }
+            z-index: 15;
+            &__Icon{
+                font-size: 2rem;
+            }
+            &:hover{
+                background: rgba($color: #000000, $alpha: 0.6);
+                .Control__Icon{
+                    color: white;
+                }
+            }
         }
         .Slides-container{
-            width: calc(100% - ($Control-width * 2));
+            width: 100%;
             overflow: hidden;
             .Slides-Wrap{
+                height: 100px;
                 @include vertical-center;
                 overflow-x: hidden;
                 .Slide{
-                    height: 100%;
+                    width: 240px;
+                    min-width: 240px;
+                    min-height: 100%;
                     margin: 0 20px;
-                    position: relative;
-                    z-index: 10;
+                    // transition: .3s ease all;
                     @include horizontal-vertical-center;
-                    &--main{
-                        width: 320px;
-                        min-width: 320px;
-                        transition: .3s ease all;
-                    }
-                    &--simple{
-                        width: 196px;
-                        min-width: 196px;
-                        transition: .3s ease all;
-                    }
                 }
             }
         }

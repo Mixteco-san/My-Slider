@@ -11,24 +11,30 @@
         margin: 0 auto;
         @include horizontal-vertical-center;
         .Control{
-            @include container-w-h($Control-width, 100%)
+            @include container-w-h($Control-width, 100%);
+            @include horizontal-vertical-center;
         }
         .Slides-container{
             width: calc(100% - ($Control-width * 2));
+            overflow: hidden;
             .Slides-Wrap{
                 @include vertical-center;
                 overflow-x: hidden;
                 .Slide{
                     height: 100%;
                     margin: 0 20px;
+                    position: relative;
+                    z-index: 10;
                     @include horizontal-vertical-center;
                     &--main{
                         width: 320px;
                         min-width: 320px;
+                        transition: .3s ease all;
                     }
                     &--simple{
                         width: 196px;
                         min-width: 196px;
+                        transition: .3s ease all;
                     }
                 }
             }

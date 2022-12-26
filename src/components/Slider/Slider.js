@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
@@ -7,7 +7,7 @@ import Image from "../Image/Image";
 import './Slider.scss';
 
 export default function Slider(){
-    const drive = 'http://drive.google.com/uc?export=view&id=';
+    // Data from backend
     const imgData = [
         {
             url: '1rlNm5YlGWDtvQXFd58FV-yLZaTC_CWrc',
@@ -42,15 +42,91 @@ export default function Slider(){
             name: 'logo 8'
         }
     ]
+    const startConfiguration = {
+        timmer: 5000,
+        autoplay: true
+    }
+    // ------ end Data ----
+    
+    const drive = 'http://drive.google.com/uc?export=view&id=';
+    const sizeList = imgData.length;
+    const sliderWrap = useRef(null);
+    const intervalFunction = useRef(null);
+    const velocidad = 0.3;
+    
+    const getWidthOfElement = (element) => {
+        return element.offsetWidth;
+    }
+
+    const moveNext = useCallback(() => {
+        if(sliderWrap.current.children.length > 5){
+            //console.log('Siguiente imagen');
+            const firstElement = sliderWrap.current.children[0];
+            
+            sliderWrap.current.style.transition = `${velocidad}s ease all`;
+            sliderWrap.current.style.translate = `-${getWidthOfElement(firstElement) + 40}px`;
+            
+            const detectFinishTransition = () => {
+                sliderWrap.current.style.transition = `none`;
+                sliderWrap.current.style.translate = `0`;
+
+                sliderWrap.current.appendChild(firstElement);
+
+                sliderWrap.current.removeEventListener('transitionend', detectFinishTransition)
+            }
+            sliderWrap.current.addEventListener('transitionend', detectFinishTransition);
+        }
+    }, [velocidad])
+    
+    const movePrev = () => {
+        if(sliderWrap.current.children.length > 5){
+            //console.log('Imagen anterior') 
+            const lastElement = sliderWrap.current.children[sizeList - 1];
+
+            sliderWrap.current.insertBefore(lastElement, sliderWrap.current.firstChild);
+
+            sliderWrap.current.style.transition = 'none';
+			sliderWrap.current.style.transform = `translateX(-${getWidthOfElement(lastElement)}px)`;
+		
+			setTimeout(() => {
+				sliderWrap.current.style.transition = `${velocidad}s ease-out all`;
+				sliderWrap.current.style.transform = `translateX(0)`;
+			}, 30);
+        }
+    }
+
+    useEffect( () => {
+        if(startConfiguration.autoplay){
+            intervalFunction.current = setInterval(() => {
+				moveNext();
+			}, startConfiguration.timmer);
+	
+			sliderWrap.current.addEventListener('mouseenter', () => {
+				clearInterval(intervalFunction.current);
+			});
+	
+			sliderWrap.current.addEventListener('mouseleave', () => {
+				intervalFunction.current = setInterval(() => {
+					moveNext();
+				}, startConfiguration.timmer);
+			});
+        }
+    }, [startConfiguration.autoplay, startConfiguration.timmer, moveNext]) 
 
     return(
         <section className="Slider">
             <div className="Slider__Wrapper">
-                <div className="Control">
+                <div 
+                    className="Control"
+                    onClick={movePrev}
+                >
                     <FontAwesomeIcon icon={faChevronLeft} />
                 </div>
                 <div className="Slides-container">
-                    <div className="Slides-Wrap">
+                    <div 
+                        ref={sliderWrap}
+                        className="Slides-Wrap"
+                    >
                     {imgData.map( (img, index) => {
                         return(
                             <div 
@@ -66,7 +142,10 @@ export default function Slider(){
                     })}
                     </div>
                 </div>
-                <div className="Control">
+                <div 
+                    className="Control"
+                    onClick={moveNext}
+                >
                     <FontAwesomeIcon icon={faChevronRight} />
                 </div>
             </div>
